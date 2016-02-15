@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<conversionRule conversionWord="trace"
+		converterClass="cn.com.yongda.common.log.TraceConverter" />
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>D:/opt/logs/yongda-api/api.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>D:/opt/logs/yongda/history/api.%d{yyyy-MM-dd}.log.gz
+			</fileNamePattern>
+			<!--<maxHistory>30</maxHistory> -->
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%trace] %-5level %logger{15} -
+				%msg%n</pattern>
+		</encoder>
+		<append>true</append>
+	</appender>
+
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>512</queueSize>
+		<appender-ref ref="FILE" />
+	</appender>
+
+	<!-- Strictly speaking, the level attribute is not necessary since -->
+	<!-- the level of the root level is set to DEBUG by default. -->
+	<root level="DEBUG">
+		<appender-ref ref="FILE" />
+	</root>
+
+	<!--根据包名设置不同日志级别 -->
+	<!--<logger name="com.lordofthejars.foo" level="INFO" additivity="false"> -->
+	<!--<appender-ref ref="STDOUT" /> -->
+	<!--</logger> -->
+
+</configuration>
