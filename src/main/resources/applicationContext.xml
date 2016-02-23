@@ -40,19 +40,24 @@
 	<context:property-placeholder location="${app.properties.location}" />
 
 	<!-- 数据库源 -->
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		p:driverClassName="${jdbc.driverClass}" 
-		p:url="${jdbc.url}"
-		p:username="${jdbc.username}" 
-		p:password="${jdbc.password}" />
+   <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${jdbc.driverClass}" p:url="${jdbc.url}"
+		p:username="${jdbc.username}" p:password="${jdbc.password}" />
+		
+	<!-- 创建SqlSessionFactory，同时指定数据源 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="dataSource" p:configLocation="classpath:mybatisConfig.xml" />
 
 	<!-- 配置事务管理器 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
-		
+
 	<!--创建数据映射器，数据映射器必须为接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
 		p:annotationClass="org.springframework.stereotype.Repository"
-		p:basePackage="cn.com.yongda.repository.dao" />
+		p:basePackage="cn.com.yongda.repository.dao" 
+		p:sqlSessionFactoryBeanName="sqlSessionFactory"/>
+
+
 </beans>
